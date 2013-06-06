@@ -88,7 +88,11 @@ ISE has been setup for speed, with multiplier style = block.
 <table>
     <tr>
         <td>datapath_E</td><td>352 LUTs + 1 MULT18x18</td><td>125 MHz</td>
+    </tr>
+    <tr>
         <td>dds</td><td>130 LUTs + 1 MULT18x18</td><td>83 MHz</td>
+    </tr>
+    <tr>
         <td>fir</td><td>208 LUTs + 4 MULT18x18 + 1 BRAM</td><td>90 MHz</td>
     </tr>
 </table>
