@@ -4,6 +4,13 @@ VHDL code samples
 This repository contains VHDL code samples meant to be shown to potential 
 employers; they are not fit for any generally useful purpose.
 
+The source for each module includes some implementation and usage details so 
+I will not repeat that information in thie readme file.
+
+
+Modules
+-------
+
 The code samples include three small DSP modules plus a simple test bench for 
 each of them:
 
@@ -61,3 +68,36 @@ the DDS output, it will only display it in the simulation wave window.
 The test bench for the ALU is also for display only, though some token effort 
 is done to validate the results: the error for each operation is computed and 
 a warning is raised if it exceeds some arbitrary threshold.
+
+Synthesis results
+-----------------
+
+
+
+Sinthesis results:
+==================
+
+These are preliminary results from running a synthesis only on the modules (no
+place-and-route).
+
+
+Target device is Spartan-3 (xc3s1400), speed grade -4, tool is ISE 14.
+ISE has been setup for speed, with multiplier style = block.
+
+
+<table>
+    <tr>
+        <td>datapath_E</td><td>352 LUTs + 1 MULT18x18</td><td>125 MHz</td>
+        <td>dds</td><td>130 LUTs + 1 MULT18x18</td><td>83 MHz</td>
+        <td>fir</td><td>208 LUTs + 4 MULT18x18 + 1 BRAM</td><td>90 MHz</td>
+    </tr>
+</table>
+
+
+
+
+
+
+
+
+
