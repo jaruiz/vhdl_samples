@@ -26,6 +26,21 @@ it has not been tested with values other than default. The parameters determine
 the size of the operands (mantissa and exponent) and are tailored to the DSP
 block of Spartan chips. 
 
+The sources are all in directory /hdl.
+
+
+Simulation Scripts
+-------------------
+
+Directory /sim includes one Modelsim simulation script for each of the three 
+samples. There is a second script for each sample, names '*_wave.do', used to 
+configure the wave window and invoked from the main simulation script.
+
+
+
+Test Benches
+------------
+
 
 All the test benches have been tried only with Modelsim SE 6.3.
 
@@ -35,9 +50,11 @@ a test signal through the FIR, logging the output to a text file formatted as
 a matlab script. The results can then ve validated by running script 
 /sim/fir_test.m
 
+
 The test bench for the DDS module is meant only for visual display. It will 
 run the DDS with two different frequencies and will do no verification on
 the DDS output, it will only display it in the simulation wave window.
+
 
 The test bench for the ALU is also for display only, though some token effort 
 is done to validate the results: the error for each operation is computed and 
