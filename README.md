@@ -47,8 +47,10 @@ All the test benches have been tried only with Modelsim SE 6.3.
 
 The FIR test bench is the only one resembling a real test bench. It will run 
 a test signal through the FIR, logging the output to a text file formatted as 
-a matlab script. The results can then ve validated by running script 
-/sim/fir_test.m
+a matlab script. The results can then be validated by running script 
+/sim/fir_test.m. 
+This script will display the actual and expected signal sequences, and compute
+the relative error.
 
 
 The test bench for the DDS module is meant only for visual display. It will 
