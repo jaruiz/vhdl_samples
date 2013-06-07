@@ -128,12 +128,14 @@ These are some synthesis results for area and speed (no constraints).
         <td>111 LEs</td>
         <td>2 MULT9x9</td>
         <td>1 M4K RAM block</td>
-        <td>~130 MHz MHz</td>
+        <td>~130 MHz</td>
     </tr>
 </table>
 
 
-
+Note that the table initialization code used in the DDS module, meant to 
+initialize the DDS tables in synthesis time, is not compatible with Quartus-2 
+ver. 11 -- the call to function 'sin' in line 117 gives a faulty result.
 
 
 
