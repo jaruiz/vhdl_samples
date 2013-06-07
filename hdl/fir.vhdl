@@ -56,7 +56,7 @@
 --
 -- Preliminar synthesis results (16-bit samples, 128 coefficients):
 -- 
--- Quartus 2, balanced; Cyclone-2 grade -7: 111 LEs, 1 M4K, 1 DSP-18 @ 154 MHz
+-- Quartus 2, balanced; Cyclone-2 grade -7: 111 LEs, 1 M4K, 1 DSP-18 @ ~130 MHz
 -- ISE 9,     area;     Spartan-3 grade -5: 48 LUTs, 1 BRAM, 1 DSP-18 @ 160 MHz 
 --------------------------------------------------------------------------------
 -- Known BUGS:

@@ -26,7 +26,7 @@ use work.txt_util.all;
 
 package fixed_pkg is
 
-constant SAMPLE_WIDTH : natural := 24;
+constant SAMPLE_WIDTH : natural := 16;
 constant SAMPLE_INTEGER_PART : natural := 0;
 
 subtype sample_t is signed(SAMPLE_WIDTH-1 downto 0);

@@ -77,23 +77,34 @@ Synthesis results
 Sinthesis results:
 ==================
 
-These are preliminary results from running a synthesis only on the modules (no
-place-and-route).
-
-
-Target device is Spartan-3 (xc3s1400), speed grade -4, tool is ISE 14.
-ISE has been setup for speed, with multiplier style = block.
+These are some synthesis results for area and speed (no constraints).
 
 
 <table>
     <tr>
-        <td>datapath_E</td><td>352 LUTs + 1 MULT18x18</td><td>125 MHz</td>
+        <td colspan='5'>
+        Spartan-3 speed grade -4 (ISE 14 set for speed, synthesis only)
+        </td>
+    <tr>
+        <td>datapath_E</td>
+        <td>352 LUTs</td>
+        <td>1 MULT18x18</td>
+        <td></td>
+        <td>125 MHz</td>
     </tr>
     <tr>
-        <td>dds</td><td>130 LUTs + 1 MULT18x18</td><td>83 MHz</td>
+        <td>dds</td>
+        <td>130 LUTs</td>
+        <td>1 MULT18x18</td>
+        <td></td>
+        <td>83 MHz</td>
     </tr>
     <tr>
-        <td>fir</td><td>208 LUTs + 4 MULT18x18 + 1 BRAM</td><td>90 MHz</td>
+        <td>fir (16-bit samples, 128 coefs)</td>
+        <td>208 LUTs</td>
+        <td>4 MULT18x18</td>
+        <td>1 BRAM</td>
+        <td>90 MHz</td>
     </tr>
 </table>
 
