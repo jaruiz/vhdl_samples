@@ -4,6 +4,14 @@ VHDL code samples
 This repository contains VHDL code samples meant to be shown to potential 
 employers; unless you are one, this repository is unlikely to interest you.
 
+
+These samples are meant to complement the open-hardware project smentioned in 
+my resume. They are not a big thing but they do showcase some skills:
+
+1.- I can turn an algorithm description into logic.
+2.- I enjoy doing it.
+
+
 The source for each module includes some implementation and usage details that 
 I will not repeat in this readme file.
 
@@ -23,11 +31,18 @@ The DDS can be parametrized through the use of VHDL generics. The structure of
 the DDS includes constant tables (the DDS uses linear interpolation, see the 
 source) which are automatically computed from the generics in synthesis time.
 
+
 The FIR cannot be parametrized at all, other than supplying the order and the
 coefficient table as generics. The coefficients are supplied as real values 
 which are converted to a fixed point number table in synthesis time.
 
-The ALU is meant to be parametrizable in some subsequent revision but it 
+The FIR has been designed to use a single RAM block for both delay queue and
+coefficient table, using the dual port capability of most FPGAs. This is done
+using a vendor-independent idiom.
+
+
+
+The ALU was meant to be parametrizable in some subsequent revision but it 
 currently is not -- the parametrization generics are not used consistently and
 it has not been tested with values other than default. The parameters determine
 the size of the operands (mantissa and exponent) and are tailored to the DSP
@@ -95,7 +110,7 @@ These are some synthesis results for area and speed (no constraints).
         <td>130 LUTs</td>
         <td>1 MULT18x18</td>
         <td></td>
-        <td>83 MHz</td>
+        <td>66 MHz</td>
     </tr>
     <tr>
         <td>fir (16-bit samples, 128 coefs)</td>
@@ -121,7 +136,10 @@ These are some synthesis results for area and speed (no constraints).
     </tr>
     <tr>
         <td>dds</td>
-        <td colspan='4'>Table initialization code not compatible with Quartus-2</td>
+        <td>123 LEs</td>
+        <td>2 MULT9x9</td>
+        <td></td>
+        <td>~90 MHz</td>
     </tr>
     <tr>
         <td>fir (16-bit samples, 128 coefs)</td>
@@ -132,12 +150,6 @@ These are some synthesis results for area and speed (no constraints).
     </tr>
 </table>
 
-
-Note that the table initialization code used in the DDS module, meant to 
-initialize the DDS tables in synthesis time, is not compatible with Quartus-2 
-ver. 11 -- the call to function 'sin' in line 117 gives a faulty result.
-
-
-
+The synthesis has been performed with default values for all generics.
 
 

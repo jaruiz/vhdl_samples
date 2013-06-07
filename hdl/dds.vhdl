@@ -34,6 +34,9 @@
 -- 2.-  Sync signals are valid for the *next* sample, not the present sample. 
 -- 3.-  The tables used should be reduced to quarter cycle tables for a strong 
 --      saving of LUTs, specially if we need more than a few phase slices.
+-- 4.-  Use of VHDL features that are often not fully or consistently supported
+--      across synthesis tools (e.g. real variable computations in synth time)
+--      should be more thoroughly analyzed or at least tried on real hardware.
 --------------------------------------------------------------------------------
 -- REFERENCES:
 -- [1] DDS: A Tool for Periodic Wave Generation (Part 1)
@@ -52,7 +55,7 @@ use work.fixed_pkg.all;
 
 entity dds is
     generic (
-        DDS_SAMPLE_WIDTH : natural  := 12;
+        DDS_SAMPLE_WIDTH : natural      := 12;
         SLOPE_WIDTH : natural       := 10;
         PHASE_ACC_WIDTH : natural   := 32; -- >= PHASE_TRUNC_WIDTH, >= 16
         PHASE_TRUNC_WIDTH : natural := 13; -- = log2(NUM_SLICES) + 6
@@ -110,13 +113,12 @@ function build_base_table(slices: natural) return PtB_rom_t is
 variable table : PtB_rom_t(0 to slices-1);
 variable slice_base, i : integer;
 variable rads_per_slice : real := 2.0 * 3.1415926 / real(slices);
-variable scale_i : integer := 2**(DDS_SAMPLE_WIDTH-1);
-variable scale : real := real(scale_i);
+variable scale : real := real(2**(DDS_SAMPLE_WIDTH-1));
 begin
     for i in 0 to slices-1 loop
         -- The 'slice base' is the value f the leftmost point of the slice.
         slice_base := integer(floor(scale * sin(real(i) * rads_per_slice)));
-
+        
         table(i) := to_signed(slice_base, DDS_SAMPLE_WIDTH);
     end loop;
     
@@ -141,21 +143,21 @@ begin
         
         -- We compute the delta for this slice...
         delta := next_slice_base - slice_base;
-        -- ...and keep track of the biggest absolute delta seen so far.
+        -- ...and keep track of the biggest absolute delta seen soo far.
         if abs(delta) > max_delta then
             max_delta := abs(delta);
         end if;
         
-        -- The slope table is actually a *delta* table; the division by the 
+        -- The slope table is actially a *delta* table; the division by the 
         -- slice width is done later, by truncating the slope product.
         table(i) := to_signed(delta, SLOPE_WIDTH);
     end loop;
-    
+
     -- Make sure the slope table has not been truncated due to insufficient
     -- precision. This will happen when the delta does not fit in the table.
     assert max_delta < 2**(SLOPE_WIDTH-1)
     report "Slope precision ("& str(SLOPE_WIDTH)& 
-           " bits) is insufficient for current signal scale."& str(max_delta)
+           " bits) is insufficient for current signal scale."
     severity failure;
 
     
