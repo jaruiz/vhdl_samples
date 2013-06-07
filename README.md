@@ -2,10 +2,10 @@ VHDL code samples
 =================
 
 This repository contains VHDL code samples meant to be shown to potential 
-employers; they are not fit for any generally useful purpose.
+employers; unless you are one, this repository is unlikely to interest you.
 
-The source for each module includes some implementation and usage details so 
-I will not repeat that information in thie readme file.
+The source for each module includes some implementation and usage details that 
+I will not repeat in this readme file.
 
 
 Modules
@@ -69,13 +69,11 @@ The test bench for the ALU is also for display only, though some token effort
 is done to validate the results: the error for each operation is computed and 
 a warning is raised if it exceeds some arbitrary threshold.
 
+
+
 Synthesis results
 -----------------
 
-
-
-Sinthesis results:
-==================
 
 These are some synthesis results for area and speed (no constraints).
 
@@ -86,7 +84,7 @@ These are some synthesis results for area and speed (no constraints).
         Spartan-3 speed grade -4 (ISE 14 set for speed, synthesis only)
         </td>
     <tr>
-        <td>datapath_E</td>
+        <td>datapath_E (17-bit mantissa, 9-bit exponent)</td>
         <td>352 LUTs</td>
         <td>1 MULT18x18</td>
         <td></td>
@@ -108,6 +106,31 @@ These are some synthesis results for area and speed (no constraints).
     </tr>
 </table>
 
+
+<table>
+    <tr>
+        <td colspan='5'>
+        Cyclone-2 -7 (Quartus-2 11 set for balance, full compilation)
+        </td>
+    <tr>
+        <td>datapath_E (17-bit mantissa, 9-bit exponent)</td>
+        <td>402 LEs</td>
+        <td>2 MULT9x9</td>
+        <td></td>
+        <td>~125 MHz</td>
+    </tr>
+    <tr>
+        <td>dds</td>
+        <td colspan='4'>Table initialization code not compatible with Quartus-2</td>
+    </tr>
+    <tr>
+        <td>fir (16-bit samples, 128 coefs)</td>
+        <td>111 LEs</td>
+        <td>2 MULT9x9</td>
+        <td>1 M4K RAM block</td>
+        <td>~130 MHz MHz</td>
+    </tr>
+</table>
 
 
 
