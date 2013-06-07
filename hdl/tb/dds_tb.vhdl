@@ -54,7 +54,7 @@ begin
 
     inst_dds: entity work.dds 
     generic map (
-        SAMPLE_WIDTH                => SAMPLE_WIDTH,
+        DDS_SAMPLE_WIDTH            => SAMPLE_WIDTH,
         PHASE_ACC_WIDTH             => PHASE_ACC_WIDTH,
         PHASE_TRUNC_WIDTH           => PHASE_TRUNC_WIDTH,
         NUM_SLICES                  => NUM_SLICES       

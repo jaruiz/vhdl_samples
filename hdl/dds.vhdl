@@ -52,7 +52,7 @@ use work.fixed_pkg.all;
 
 entity dds is
     generic (
-        SAMPLE_WIDTH : natural      := 16;
+        DDS_SAMPLE_WIDTH : natural  := 12;
         SLOPE_WIDTH : natural       := 10;
         PHASE_ACC_WIDTH : natural   := 32; -- >= PHASE_TRUNC_WIDTH, >= 16
         PHASE_TRUNC_WIDTH : natural := 13; -- = log2(NUM_SLICES) + 6
@@ -63,8 +63,8 @@ entity dds is
         reset                   : in std_logic; -- global reset
         -- amount added to phase acc each sample cycle
         phase_delta             : in unsigned(PHASE_ACC_WIDTH-1 downto 0);
-        sample_sin_out          : out signed(SAMPLE_WIDTH-1 downto 0);
-        sample_cos_out          : out signed(SAMPLE_WIDTH-1 downto 0);
+        sample_sin_out          : out signed(DDS_SAMPLE_WIDTH-1 downto 0);
+        sample_cos_out          : out signed(DDS_SAMPLE_WIDTH-1 downto 0);
         sample_valid            : out std_logic;
         -- phase point sync flags; behaviour undefined yet 
         sync                    : out std_logic_vector(3 downto 0)
@@ -92,7 +92,7 @@ constant SLICE_REM_WIDTH : natural := PHASE_TRUNC_WIDTH - SLICE_INDEX_WIDTH;
 ---- Local data types and (synthesizable) functions ----------------------------
 -- These might as well go into a package, except they are only used here.
 
-subtype base_t is signed(SAMPLE_WIDTH-1 downto 0);
+subtype base_t is signed(DDS_SAMPLE_WIDTH-1 downto 0);
 subtype slope_t is signed(SLOPE_WIDTH-1 downto 0);
 
 -- Phase-to-sin_base ROM.
@@ -110,13 +110,14 @@ function build_base_table(slices: natural) return PtB_rom_t is
 variable table : PtB_rom_t(0 to slices-1);
 variable slice_base, i : integer;
 variable rads_per_slice : real := 2.0 * 3.1415926 / real(slices);
-variable scale : real := real(2**(SAMPLE_WIDTH-1));
+variable scale_i : integer := 2**(DDS_SAMPLE_WIDTH-1);
+variable scale : real := real(scale_i);
 begin
     for i in 0 to slices-1 loop
         -- The 'slice base' is the value f the leftmost point of the slice.
         slice_base := integer(floor(scale * sin(real(i) * rads_per_slice)));
-        
-        table(i) := to_signed(slice_base, SAMPLE_WIDTH);
+
+        table(i) := to_signed(slice_base, DDS_SAMPLE_WIDTH);
     end loop;
     
     return table;
@@ -140,21 +141,21 @@ begin
         
         -- We compute the delta for this slice...
         delta := next_slice_base - slice_base;
-        -- ...and keep track of the biggest absolute delta seen soo far.
+        -- ...and keep track of the biggest absolute delta seen so far.
         if abs(delta) > max_delta then
             max_delta := abs(delta);
         end if;
         
-        -- The slope table is actially a *delta* table; the division by the 
+        -- The slope table is actually a *delta* table; the division by the 
         -- slice width is done later, by truncating the slope product.
         table(i) := to_signed(delta, SLOPE_WIDTH);
     end loop;
-
+    
     -- Make sure the slope table has not been truncated due to insufficient
     -- precision. This will happen when the delta does not fit in the table.
     assert max_delta < 2**(SLOPE_WIDTH-1)
     report "Slope precision ("& str(SLOPE_WIDTH)& 
-           " bits) is insufficient for current signal scale."
+           " bits) is insufficient for current signal scale."& str(max_delta)
     severity failure;
 
     
@@ -197,11 +198,11 @@ signal phase_slice_mux :    unsigned(SLICE_INDEX_WIDTH-1 downto 0);
 -- phase_markers: unregistered versions of sync outputs
 signal phase_mark :         std_logic_vector(3 downto 0);
 
-signal sin_base :           signed(SAMPLE_WIDTH-1 downto 0);
-signal sin_value :          signed(SAMPLE_WIDTH-1 downto 0);
-signal sin_fraction :       signed(SAMPLE_WIDTH-1 downto 0);
+signal sin_base :           signed(DDS_SAMPLE_WIDTH-1 downto 0);
+signal sin_value :          signed(DDS_SAMPLE_WIDTH-1 downto 0);
+signal sin_fraction :       signed(DDS_SAMPLE_WIDTH-1 downto 0);
 signal product :            signed(phase_rem'length+SLOPE_WIDTH-1 downto 0);
-signal product_extended :   signed(SAMPLE_WIDTH+SLOPE_WIDTH-1 downto 0);
+signal product_extended :   signed(DDS_SAMPLE_WIDTH+SLOPE_WIDTH-1 downto 0);
 
 signal update_acc :         std_logic;
 signal update_sine :        std_logic;
@@ -254,7 +255,7 @@ product_extended(product'high downto 0) <= product;
 product_extended(product_extended'high downto product'high+1) <= (others => product(product'high));
 -- ...and truncate it dropping the lowest SLICE_REM_WIDTH bits. This is the same
 -- as dividing by the width of the slice.
-sin_fraction <= product_extended(SLICE_REM_WIDTH+SAMPLE_WIDTH-1 downto SLICE_REM_WIDTH); 
+sin_fraction <= product_extended(SLICE_REM_WIDTH+DDS_SAMPLE_WIDTH-1 downto SLICE_REM_WIDTH); 
 -- Finally add it to slice base point.
 sin_value <= sin_base + sin_fraction; 
 
