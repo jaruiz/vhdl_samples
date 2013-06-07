@@ -36,8 +36,9 @@ coefficient table as generics. The coefficients are supplied as real values
 which are converted to a fixed point number table in synthesis time.
 
 The FIR has been designed to use a single RAM block for both delay queue and
-coefficient table, using the dual port capability of most FPGAs. This is done
-using a vendor-independent idiom.
+coefficient table, using the dual port RAM capability of most FPGA architectures. 
+This is done using a vendor-independent VHDL idiom that works at least with 
+recent versions of Xilinx and Altera tools.
 
 
 
@@ -45,16 +46,21 @@ The ALU was meant to be parametrizable in some subsequent revision but it
 currently is not -- the parametrization generics are not used consistently and
 it has not been tested with values other than default. The parameters determine
 the size of the operands (mantissa and exponent) and are tailored to the DSP
-block of Spartan chips. 
+block of Spartan chips, though the module can be synthesized for Altera chips
+too.
 
 The sources are all in directory /hdl.
+
+No synthesis tool other than the free ones supplied by Xilinx and Altera has 
+been used with these modules; they may contain constructs incompatible with
+other tools.
 
 
 Simulation Scripts
 -------------------
 
 Directory /sim includes one Modelsim simulation script for each of the three 
-samples. There is a second script for each sample, names '*_wave.do', used to 
+samples. There is a second script for each sample, named '*_wave.do', used to 
 configure the wave window and invoked from the main simulation script.
 
 
@@ -77,6 +83,8 @@ the relative error.
 The test bench for the DDS module is meant only for visual display. It will 
 run the DDS with two different frequencies and will do no verification on
 the DDS output, it will only display it in the simulation wave window.
+It wouldn't be difficult extending this test bench so that waveform outputs were
+logged to file so that they could be verified with Matlab/Octave/SciPy scripts.
 
 
 The test bench for the ALU is also for display only, though some token effort 
