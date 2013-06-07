@@ -65,8 +65,7 @@ configure the wave window and invoked from the main simulation script.
 
 
 
-Test Benches
-------------
+### Test Benches
 
 
 All the test benches have been tried only with Modelsim SE 6.3.
