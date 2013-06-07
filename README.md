@@ -2,14 +2,13 @@ VHDL code samples
 =================
 
 This repository contains VHDL code samples meant to be shown to potential 
-employers; unless you are one, this repository is unlikely to interest you.
+employers; unless you are one, the contents of this repository are unlikely 
+to interest you.
 
 
-These samples are meant to complement the open-hardware project smentioned in 
-my resume. They are not a big thing but they do showcase some skills:
-
-1.- I can turn an algorithm description into logic.
-2.- I enjoy doing it.
+These samples are a complement to the open-hardware projects mentioned in 
+my resume. They are not very remarkable but at least they do show that I can 
+turn an algorithm description into decent logic, or so I think.
 
 
 The source for each module includes some implementation and usage details that 
